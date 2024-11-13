@@ -3,8 +3,6 @@ import { Box, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import RoundedCorners from './poster';
-import ActionAreaCard from './card';
-
 
 function Body() {
   const [value] = React.useState(2);
@@ -27,9 +25,6 @@ function Body() {
       <Button variant="outlined">Horror</Button>
       <Button variant="outlined">Suspense Thriller</Button>
     </Stack>
-    </Box>
-    <Box>
-    <ActionAreaCard/>
     </Box>
     <Box>
     <RoundedCorners/>
