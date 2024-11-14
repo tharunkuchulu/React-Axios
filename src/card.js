@@ -1,10 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography, CardActionArea, Button } from '@mui/material';
-import axios from "axios";
-
+import axios from 'axios';
 
 export default function ActionAreaCard() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [popularMovie, setPopularMovie] = useState(null);
+
+  useEffect(() => {
+    const fetchPopularMovie = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}&language=en-US&page=1`
+        );
+        console.log(response.data.results[0]); // Log the first movie
+        setPopularMovie(response.data.results[0]);
+      } catch (error) {
+        console.error('Error fetching movie:', error);
+      }
+    };
+  
+    fetchPopularMovie();
+  }, []);
+  
+
+  const cardData = [
+    {
+      title: popularMovie ? popularMovie.title : 'Loading...',
+      description: popularMovie ? 'Popular Movie of the Day!' : '',
+      imageUrl: popularMovie
+        ? `https://image.tmdb.org/t/p/w500${popularMovie.poster_path}`
+        : 'https://via.placeholder.com/1200x550?text=Loading...',
+      width: 1200,
+      height: 550,
+    },
+    {
+      title: 'Another Title',
+      description: 'Another description here...',
+      imageUrl: 'https://via.placeholder.com/1000x550?text=Card+2',
+      width: 1000,
+      height: 550,
+    },
+    {
+      title: 'Yet Another Title',
+      description: 'This is card 3!',
+      imageUrl: 'https://via.placeholder.com/1100x550?text=Card+3',
+      width: 1100,
+      height: 550,
+    },
+  ];
 
   const handleNext = () => {
     setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cardData.length);
@@ -16,50 +59,18 @@ export default function ActionAreaCard() {
 
   const { title, description, imageUrl, width, height } = cardData[currentCardIndex];
 
-  const [popularMovie, setPopularMovie] = useState(null);
-
-  useEffect(() => {
-    const fetchPopularMovie = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}&language=en-US&page=1`
-        );
-        setPopularMovie(response.data.results[0]);
-      } catch (error) {
-        console.error("Error fetching movie:", error);
-      }
-    };
-
-    fetchPopularMovie();
-  }, []);
-
   return (
-    const cardData = [
-      {
-        title: {popularMovie.title},
-        alt={popularMovie.title},
-        description: '',
-        src={`https://image.tmdb.org/t/p/w500${popularMovie.poster_path}`},
-        width: 1200,
-        height: 550,
-      },
-      {
-        title: '',
-        description: '',
-        imageUrl: '.jpg',
-        width: 1000,
-        height: 550,
-      },
-      {
-        title: '',
-        description: '',
-        imageUrl: '.jpg',
-        width: 1100,
-        height: 550,
-      },
-    ];
-    
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', position: 'relative',left:'-135px',top:'-70px' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        position: 'relative',
+        left: '-135px',
+        top: '-70px',
+      }}
+    >
       {/* Previous Button */}
       <Button
         variant="contained"
@@ -76,7 +87,6 @@ export default function ActionAreaCard() {
       </Button>
 
       {/* Card Component */}
-      {popularMovie && (
       <Card
         elevation={10}
         sx={{
@@ -125,7 +135,6 @@ export default function ActionAreaCard() {
           </CardContent>
         </CardActionArea>
       </Card>
-        )}
 
       {/* Next Button */}
       <Button
